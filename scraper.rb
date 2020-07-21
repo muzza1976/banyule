@@ -3,12 +3,15 @@ require 'mechanize'
 
 agent = Mechanize.new
 
-baseurl = "https://www.banyule.vic.gov.au/Planning-building/Review-local-planning-applications/Advertised-planning-applications"
+#baseurl = "https://www.banyule.vic.gov.au/Planning-building/Review-local-planning-applications/Advertised-planning-applications"
+baseurl = "https://www.banyule.vic.gov.au/Planning-building/Review-local-planning-applications/Planning-applications-on-public-notice"
 pageindex=1
 comment_url = "mailto:enquiries@banyule.vic.gov.au"
 
 loop do
   url = baseurl + "?dlv_OC%20CL%20Public%20Works%20and%20Projects=(pageindex=#{pageindex})"
+  puts(url)
+  
   page = agent.get(url)
 
   page.search('.listing-results+.list-container .list-item-container a').each do |application|
