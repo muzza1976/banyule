@@ -3,14 +3,11 @@ require 'mechanize'
 
 agent = Mechanize.new
 
-#baseurl = "https://www.banyule.vic.gov.au/Planning-building/Review-local-planning-applications/Advertised-planning-applications"
 baseurl = "https://www.banyule.vic.gov.au/Planning-building/Review-local-planning-applications/Planning-applications-on-public-notice"
 pageindex=1
-comment_url = "mailto:enquiries@banyule.vic.gov.au"
 
 loop do
   url = baseurl + "?dlv_OC%20CL%20Public%20Works%20and%20Projects=(pageindex=#{pageindex})"
-  puts(url)
   
   page = agent.get(url)
 
@@ -36,7 +33,6 @@ loop do
       "address" => address,
       "description" => detail_page.search('.project-details-list+p').inner_text.strip.to_s,
       "info_url"    => application.attributes['href'].to_s,
-      "comment_url" => comment_url,
       "date_scraped" => Date.today.to_s,
       "on_notice_to" => DateTime.parse(notice_date).to_date.to_s
     }
