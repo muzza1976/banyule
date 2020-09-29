@@ -13,8 +13,8 @@ loop do
 
   page.search('.listing-results+.list-container .list-item-container a').each do |application|
     detail_page = agent.get(application.attributes['href'].to_s)
-    notice_date = application.search('p').inner_text.strip.split(/Final da(y|te) of notice: /)[2]
     header = detail_page.search('h1.oc-page-title').inner_text.strip.to_s
+    notice_date = application.search('p').inner_text.strip.split(/: /)[1]
     council_reference = header.split(/(.*) - (.*)/)[2]
     unless council_reference
       council_reference = header.split(/(.* )(P[0-9]+\/[0-9]+)/)[2]
