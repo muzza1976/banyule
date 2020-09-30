@@ -1,18 +1,16 @@
 require 'scraperwiki'
-require 'mechanize'
-
-agent = Mechanize.new
+require 'nokogiri'
 
 baseurl = "https://www.banyule.vic.gov.au/Planning-building/Review-local-planning-applications/Planning-applications-on-public-notice"
 pageindex=1
 
 loop do
   url = baseurl + "?dlv_OC%20CL%20Public%20Works%20and%20Projects=(pageindex=#{pageindex})"
-  
-  page = agent.get(url)
+  html = ScraperWiki.scrape url
+  page = Nokogiri.parse html
 
   page.search('.listing-results+.list-container .list-item-container a').each do |application|
-    detail_page = agent.get(application.attributes['href'].to_s)
+    detail_page = Nokogiri.parse(ScraperWiki.scrape(application.attributes['href'].to_s))
     header = detail_page.search('h1.oc-page-title').inner_text.strip.to_s
     notice_date = application.search('p').inner_text.strip.split(/: /)[1]
     council_reference = header.split(/(.*) - (.*)/)[2]
